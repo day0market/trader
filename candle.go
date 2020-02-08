@@ -10,7 +10,7 @@ type ICandle interface {
 	GetLow() float64
 	GetClose() float64
 	GetTimeframe() string
-	GetCloseDatetime() time.Time
+	GetOpenDatetime() time.Time
 }
 
 type ICandleOpen interface {
@@ -20,14 +20,15 @@ type ICandleOpen interface {
 }
 
 type Candle struct {
-	Open       float64
-	Close      float64
-	High       float64
-	Low        float64
-	Volume     int64
-	Timeframe  string
-	Datetime   time.Time
-	Instrument IInstrument
+	Open         float64
+	Close        float64
+	High         float64
+	Low          float64
+	Volume       int64
+	Timeframe    string
+	Datetime     time.Time
+	OpenDatetime time.Time
+	Instrument   IInstrument
 }
 
 func (t *Candle) GetDatetime() time.Time {
@@ -57,16 +58,8 @@ func (t *Candle) GetTimeframe() string {
 	return t.Timeframe
 }
 
-func (t *Candle) GetCloseDatetime() time.Time {
-	delta := 1
-	if t.Timeframe == "D" {
-		delta = 8 * 60
-	}
-	if t.Timeframe == "W" {
-		delta = 24 * 6
-	}
-
-	return t.Datetime.Add(time.Minute*time.Duration(delta) - time.Second)
+func (t *Candle) GetOpenDatetime() time.Time {
+	return t.OpenDatetime
 
 }
 
