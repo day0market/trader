@@ -16,6 +16,7 @@ type ITimeOfDay interface {
 	Hour() int
 	Minute() int
 	Second() int
+	Location() *time.Location
 }
 
 type IInstrumentPriceContainer interface {
