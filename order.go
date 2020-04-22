@@ -55,6 +55,7 @@ type IOrder interface {
 	SetState(OrderState) bool
 	GetQty() int64
 	UpdateQty(int64) bool
+	SetUpdateTime(t time.Time)
 	GetUpdateTime() time.Time
 	GetInstrument() IInstrument
 
