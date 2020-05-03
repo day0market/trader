@@ -19,4 +19,12 @@ type IPosition interface {
 	GetClosedPnL() float64
 	GetOpenPnL() float64
 	GetOpenPrice() float64
+	GetExecutions() []IExecution
+}
+
+type IExecution interface {
+	GetOrder() IOrder
+	GetTime() time.Time
+	GetQty() int64
+	GetPrice() float64
 }

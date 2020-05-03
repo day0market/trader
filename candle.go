@@ -9,6 +9,7 @@ type ICandle interface {
 	GetHigh() float64
 	GetLow() float64
 	GetClose() float64
+	GetVolume() float64
 	GetTimeframe() string
 	GetOpenDatetime() time.Time
 }
@@ -52,7 +53,10 @@ func (t *Candle) GetLow() float64 {
 }
 func (t *Candle) GetClose() float64 {
 	return t.Close
+}
 
+func (t *Candle) GetVolume() float64 {
+	return float64(t.Volume)
 }
 func (t *Candle) GetTimeframe() string {
 	return t.Timeframe

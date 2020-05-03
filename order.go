@@ -62,4 +62,6 @@ type IOrder interface {
 	GetTIF() OrderTIF
 	Replace(price float64) bool
 	GetID() string
+	GetContinuousTags() map[string]float64
+	GetDiscreteTags() map[string]string
 }
