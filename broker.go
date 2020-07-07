@@ -13,5 +13,6 @@ type IBroker interface {
 	AllClosedPositions() []IPosition
 	ClosedPositions(i IInstrument) []IPosition
 	AllOpenOrders() []IOrder
+	AllOrders() []IOrder
 	OpenOrders(i IInstrument) []IOrder
 }

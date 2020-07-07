@@ -16,6 +16,7 @@ type IExchange interface {
 	GetMarketOpenTime() ITimeOfDay
 	GetMarketCloseTime() ITimeOfDay
 	GetLocation() *time.Location
+	GetName() string
 }
 
 type ITimeOfDay interface {
@@ -69,4 +70,8 @@ func (e *Exchange) GetMarketCloseTime() ITimeOfDay {
 
 func (e *Exchange) GetLocation() *time.Location {
 	return e.Location
+}
+
+func (e *Exchange) GetName() string {
+	return e.Name
 }

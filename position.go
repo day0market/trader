@@ -19,7 +19,10 @@ type IPosition interface {
 	GetClosedPnL() float64
 	GetOpenPnL() float64
 	GetOpenPrice() float64
+	GetFirstPrice() float64
+	GetLastPrice() float64
 	GetExecutions() []IExecution
+	ID() string
 }
 
 type IExecution interface {

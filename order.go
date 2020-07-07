@@ -64,4 +64,6 @@ type IOrder interface {
 	GetID() string
 	GetContinuousTags() map[string]float64
 	GetDiscreteTags() map[string]string
+	SetPositionID(string)
+	GetPositionID() string
 }
