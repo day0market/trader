@@ -57,7 +57,7 @@ type IOrder interface {
 	UpdateQty(int64) bool
 	SetUpdateTime(t time.Time)
 	GetUpdateTime() time.Time
-	GetInstrument() IInstrument
+	Instrument() IInstrument
 
 	GetTIF() OrderTIF
 	Replace(price float64) bool
