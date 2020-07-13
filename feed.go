@@ -13,10 +13,9 @@ type IFeedEvent interface {
 
 type ISessionEvent interface {
 	IFeedEvent
+	IInstrumentPriceContainer
 	IsAuctionBased() bool
-	GetPrice() float64
 	GetVolume() int64
-	GetInstrument() IInstrument
 }
 
 // *** Session Closed **
@@ -35,7 +34,7 @@ type SessionClosedEvent struct {
 	Instrument       IInstrument
 }
 
-func (s *SessionClosedEvent) GetPrice() float64 {
+func (s *SessionClosedEvent) GetRelevantPrice() float64 {
 	return s.Price
 }
 
@@ -120,7 +119,7 @@ func (s *SessionOpenEvent) GetDatetime() time.Time {
 	return s.EventTime
 }
 
-func (s *SessionOpenEvent) GetPrice() float64 {
+func (s *SessionOpenEvent) GetRelevantPrice() float64 {
 	return s.Price
 }
 
