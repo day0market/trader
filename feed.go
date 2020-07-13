@@ -11,7 +11,8 @@ type IFeedEvent interface {
 	GetDatetime() time.Time
 }
 
-type sessionEvent interface {
+type ISessionEvent interface {
+	IFeedEvent
 	IsAuctionBased() bool
 	GetPrice() float64
 	GetVolume() int64
@@ -21,7 +22,7 @@ type sessionEvent interface {
 // *** Session Closed **
 type ISessionClosedEvent interface {
 	IFeedEvent
-	sessionEvent
+	ISessionEvent
 	GetSessionCloseTime() time.Time
 }
 
@@ -58,6 +59,25 @@ func (s *SessionClosedEvent) GetSessionCloseTime() time.Time {
 	return s.SessionCloseTime
 }
 
+// *** After Session Close **
+type IAfterSessionCloseEvent interface {
+	IFeedEvent
+	GetSessionCloseTime() time.Time
+}
+
+type AfterSessionCloseEvent struct {
+	EventTime        time.Time
+	SessionCloseTime time.Time
+}
+
+func (s *AfterSessionCloseEvent) GetDatetime() time.Time {
+	return s.EventTime
+}
+
+func (s *AfterSessionCloseEvent) GetSessionCloseTime() time.Time {
+	return s.SessionCloseTime
+}
+
 // *** Session Will Close ***
 type ISessionWillCloseEvent interface {
 	IFeedEvent
@@ -79,16 +99,21 @@ func (s *SessionWillCloseEvent) GetDatetime() time.Time {
 // *** Session Open ***
 type ISessionOpenEvent interface {
 	IFeedEvent
-	IsAuctionBased() bool
-	GetPrice() float64
+	ISessionEvent
+	GetSessionOpenTime() time.Time
 }
 
 type SessionOpenEvent struct {
-	EventTime    time.Time
-	Instrument   IInstrument
-	Price        float64
-	AuctionBased bool
-	Volume       int64
+	EventTime       time.Time
+	SessionOpenTime time.Time
+	Instrument      IInstrument
+	Price           float64
+	AuctionBased    bool
+	Volume          int64
+}
+
+func (s *SessionOpenEvent) GetSessionOpenTime() time.Time {
+	return s.SessionOpenTime
 }
 
 func (s *SessionOpenEvent) GetDatetime() time.Time {
