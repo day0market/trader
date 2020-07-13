@@ -50,6 +50,7 @@ const (
 type IOrder interface {
 	GetSide() OrderSide
 	GetPrice() float64
+	GetExecutionPrice() float64
 	GetType() OrderType
 	GetState() OrderState
 	SetState(OrderState) bool
@@ -57,6 +58,8 @@ type IOrder interface {
 	UpdateQty(int64) bool
 	SetUpdateTime(t time.Time)
 	GetUpdateTime() time.Time
+	SetCreationTime(t time.Time)
+	GetCreationTime() time.Time
 	Instrument() IInstrument
 
 	GetTIF() OrderTIF
