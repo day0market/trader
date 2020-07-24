@@ -62,11 +62,13 @@ func (s *SessionClosedEvent) GetSessionCloseTime() time.Time {
 type IAfterSessionCloseEvent interface {
 	IFeedEvent
 	GetSessionCloseTime() time.Time
+	GetInstrument() IInstrument
 }
 
 type AfterSessionCloseEvent struct {
 	EventTime        time.Time
 	SessionCloseTime time.Time
+	Instrument       IInstrument
 }
 
 func (s *AfterSessionCloseEvent) GetDatetime() time.Time {
@@ -75,6 +77,10 @@ func (s *AfterSessionCloseEvent) GetDatetime() time.Time {
 
 func (s *AfterSessionCloseEvent) GetSessionCloseTime() time.Time {
 	return s.SessionCloseTime
+}
+
+func (s *AfterSessionCloseEvent) GetInstrument() IInstrument {
+	return s.Instrument
 }
 
 // *** Session Will Close ***
@@ -139,11 +145,17 @@ func (s *SessionOpenEvent) GetVolume() int64 {
 type ISessionWillOpenEvent interface {
 	IFeedEvent
 	GetSessionExpectedOpenTime() time.Time
+	GetInstrument() IInstrument
 }
 
 type SessionWillOpenEvent struct {
 	EventTime       time.Time
 	SessionOpenTime time.Time
+	Instrument      IInstrument
+}
+
+func (s *SessionWillOpenEvent) GetInstrument() IInstrument {
+	return s.Instrument
 }
 
 func (s *SessionWillOpenEvent) GetDatetime() time.Time {

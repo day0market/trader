@@ -19,6 +19,8 @@ type IExchange interface {
 	GetName() string
 	HasOpeningAuction() bool
 	HasClosingAuction() bool
+	OpenSessionDuration() int
+	CloseSessionDuration() int
 }
 
 type ITimeOfDay interface {
@@ -62,6 +64,16 @@ type Exchange struct {
 	Location       *time.Location
 	OpeningAuction bool
 	ClosingAuction bool
+	OpenDuration   int
+	CloseDuration  int
+}
+
+func (e *Exchange) OpenSessionDuration() int {
+	return e.OpenDuration
+}
+
+func (e *Exchange) CloseSessionDuration() int {
+	return e.CloseDuration
 }
 
 func (e *Exchange) GetMarketOpenTime() ITimeOfDay {
