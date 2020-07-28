@@ -11,7 +11,7 @@ const (
 )
 
 type IPosition interface {
-	Instrument() IInstrument
+	Instrument() Instrument
 	OpenTime() time.Time
 	CloseTime() time.Time
 	Side() PositionSide
@@ -26,7 +26,7 @@ type IPosition interface {
 }
 
 type IExecution interface {
-	GetOrder() IOrder
+	GetOrder() Order
 	GetTime() time.Time
 	GetQty() int64
 	GetPrice() float64

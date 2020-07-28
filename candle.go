@@ -1,92 +1,95 @@
 package trader
 
-import "time"
-
-type ICandle interface {
-	IInstrumentPriceContainer
-
-	GetOpen() float64
-	GetHigh() float64
-	GetLow() float64
-	GetClose() float64
-	GetVolume() float64
-	GetTimeframe() string
-	GetOpenDatetime() time.Time
-}
-
-type ICandleOpen interface {
-	IInstrumentPriceContainer
-	GetOpen() float64
-	GetTimeframe() string
-}
-
 type Candle struct {
-	Open         float64
-	Close        float64
-	High         float64
-	Low          float64
-	Volume       int64
-	Timeframe    string
-	Datetime     time.Time
-	OpenDatetime time.Time
-	Instrument   IInstrument
+	open         float64
+	close        float64
+	high         float64
+	low          float64
+	volume       float64
+	timeframe    string
+	datetime     int64
+	openDatetime int64
+	instrumentID int
 }
 
-func (t *Candle) GetDatetime() time.Time {
-	return t.Datetime
-}
-func (t *Candle) GetInstrument() IInstrument {
-	return t.Instrument
-}
-func (t *Candle) GetRelevantPrice() float64 {
-	return t.Close
-
-}
-func (t *Candle) GetOpen() float64 {
-	return t.Open
-}
-func (t *Candle) GetHigh() float64 {
-	return t.High
-}
-func (t *Candle) GetLow() float64 {
-	return t.Low
-}
-func (t *Candle) GetClose() float64 {
-	return t.Close
+func NewCandle(o, h, l, c, v float64, tf string, closeTS, openTS int64, instID int) Candle {
+	return Candle{
+		open:         o,
+		close:        c,
+		high:         h,
+		low:          l,
+		volume:       v,
+		timeframe:    tf,
+		datetime:     closeTS,
+		openDatetime: openTS,
+		instrumentID: instID,
+	}
 }
 
-func (t *Candle) GetVolume() float64 {
-	return float64(t.Volume)
+func (t Candle) Datetime() int64 {
+	return t.datetime
 }
-func (t *Candle) GetTimeframe() string {
-	return t.Timeframe
+func (t Candle) InstrumentID() int {
+	return t.instrumentID
+}
+func (t Candle) RelevantPrice() float64 {
+	return t.close
 }
 
-func (t *Candle) GetOpenDatetime() time.Time {
-	return t.OpenDatetime
+func (t Candle) Open() float64 {
+	return t.open
+}
+func (t Candle) High() float64 {
+	return t.high
+}
+func (t Candle) Low() float64 {
+	return t.low
+}
+func (t Candle) Close() float64 {
+	return t.close
+}
+
+func (t Candle) Volume() float64 {
+	return t.volume
+}
+func (t Candle) Timeframe() string {
+	return t.timeframe
+}
+
+func (t *Candle) OpenDatetime() int64 {
+	return t.openDatetime
 
 }
 
 type CandleOpen struct {
-	Open       float64
-	Timeframe  string
-	Datetime   time.Time
-	Instrument IInstrument
+	open         float64
+	datetime     int64
+	timeframe    string
+	instrumentID int
 }
 
-func (t *CandleOpen) GetDatetime() time.Time {
-	return t.Datetime
+func NewCandleOpen(o float64, datetime int64, tf string, instID int) CandleOpen {
+	return CandleOpen{
+		open:         o,
+		datetime:     datetime,
+		timeframe:    tf,
+		instrumentID: instID,
+	}
 }
-func (t *CandleOpen) GetInstrument() IInstrument {
-	return t.Instrument
-}
-func (t *CandleOpen) GetRelevantPrice() float64 {
-	return t.Open
 
+func (t CandleOpen) Datetime() int64 {
+	return t.datetime
 }
-func (t *CandleOpen) GetOpen() float64 {
-	return t.Open
+func (t CandleOpen) InstrumentID() int {
+	return t.instrumentID
 }
-func (t *CandleOpen) GetTimeframe() string {
-	return t.Timeframe
+func (t CandleOpen) RelevantPrice() float64 {
+	return t.open
+}
+
+func (t CandleOpen) Open() float64 {
+	return t.open
+}
+func (t CandleOpen) Timeframe() string {
+	return t.timeframe
 }

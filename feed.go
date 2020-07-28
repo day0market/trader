@@ -1,205 +1,224 @@
 package trader
 
-import "time"
-
 type IFeed interface {
-	Subscribe(chan<- IFeedEvent, []IInstrument)
+	Subscribe(chan<- IFeedEvent, []Instrument)
 	Unsubscribe()
 }
 
 type IFeedEvent interface {
-	GetDatetime() time.Time
+	Datetime() int64
 }
 
 type ISessionEvent interface {
 	IFeedEvent
 	IInstrumentPriceContainer
 	IsAuctionBased() bool
-	GetVolume() int64
+	Volume() float64
 }
 
 // *** Session Closed **
-type ISessionClosedEvent interface {
-	IFeedEvent
-	ISessionEvent
-	GetSessionCloseTime() time.Time
-}
-
 type SessionClosedEvent struct {
-	EventTime        time.Time
-	SessionCloseTime time.Time
-	Price            float64
-	Volume           int64
-	AuctionBased     bool
-	Instrument       IInstrument
+	eventTime        int64
+	sessionCloseTime int64
+	volume           float64
+	price            float64
+	instrumentID     int
+	auctionBased     bool
 }
 
-func (s *SessionClosedEvent) GetRelevantPrice() float64 {
-	return s.Price
+func NewSessionClosedEvent(et, sessCloseTime int64, price, vol float64, auctionBased bool, instID int) SessionClosedEvent {
+	return SessionClosedEvent{
+		eventTime:        et,
+		sessionCloseTime: sessCloseTime,
+		volume:           vol,
+		price:            price,
+		auctionBased:     auctionBased,
+		instrumentID:     instID,
+	}
 }
 
-func (s *SessionClosedEvent) IsAuctionBased() bool {
-	return s.AuctionBased
+func (s SessionClosedEvent) RelevantPrice() float64 {
+	return s.price
 }
 
-func (s *SessionClosedEvent) GetInstrument() IInstrument {
-	return s.Instrument
+func (s SessionClosedEvent) IsAuctionBased() bool {
+	return s.auctionBased
 }
 
-func (s *SessionClosedEvent) GetVolume() int64 {
-	return s.Volume
+func (s SessionClosedEvent) InstrumentID() int {
+	return s.instrumentID
 }
 
-func (s *SessionClosedEvent) GetDatetime() time.Time {
-	return s.EventTime
+func (s SessionClosedEvent) Volume() float64 {
+	return s.volume
 }
 
-func (s *SessionClosedEvent) GetSessionCloseTime() time.Time {
-	return s.SessionCloseTime
+func (s SessionClosedEvent) Datetime() int64 {
+	return s.eventTime
+}
+
+func (s *SessionClosedEvent) SessionCloseTime() int64 {
+	return s.sessionCloseTime
 }
 
 // *** After Session Close **
-type IAfterSessionCloseEvent interface {
-	IFeedEvent
-	GetSessionCloseTime() time.Time
-	GetInstrument() IInstrument
-}
-
 type AfterSessionCloseEvent struct {
-	EventTime        time.Time
-	SessionCloseTime time.Time
-	Instrument       IInstrument
+	eventTime        int64
+	sessionCloseTime int64
+	instrumentID     int
 }
 
-func (s *AfterSessionCloseEvent) GetDatetime() time.Time {
-	return s.EventTime
+func NewAfterSessionClosedEvent(et, sct int64, instID int) AfterSessionCloseEvent {
+	return AfterSessionCloseEvent{
+		eventTime:        et,
+		sessionCloseTime: sct,
+		instrumentID:     instID,
+	}
 }
 
-func (s *AfterSessionCloseEvent) GetSessionCloseTime() time.Time {
-	return s.SessionCloseTime
+func (s AfterSessionCloseEvent) Datetime() int64 {
+	return s.eventTime
 }
 
-func (s *AfterSessionCloseEvent) GetInstrument() IInstrument {
-	return s.Instrument
+func (s AfterSessionCloseEvent) SessionCloseTime() int64 {
+	return s.sessionCloseTime
+}
+
+func (s AfterSessionCloseEvent) InstrumentID() int {
+	return s.instrumentID
 }
 
 // *** Session Will Close ***
-type ISessionWillCloseEvent interface {
-	IFeedEvent
-	GetExpectedSessionCloseTime() time.Time
-}
 type SessionWillCloseEvent struct {
-	EventTime                time.Time
-	ExpectedSessionCloseTime time.Time
+	eventTime                int64
+	expectedSessionCloseTime int64
 }
 
-func (s *SessionWillCloseEvent) GetExpectedSessionCloseTime() time.Time {
-	return s.ExpectedSessionCloseTime
+func NewSessionWillCloseEvent(et, esct int64) SessionWillCloseEvent {
+	return SessionWillCloseEvent{
+		eventTime:                et,
+		expectedSessionCloseTime: esct,
+	}
 }
 
-func (s *SessionWillCloseEvent) GetDatetime() time.Time {
-	return s.EventTime
+func (s *SessionWillCloseEvent) ExpectedSessionCloseTime() int64 {
+	return s.expectedSessionCloseTime
+}
+
+func (s *SessionWillCloseEvent) Datetime() int64 {
+	return s.eventTime
 }
 
 // *** Session Open ***
-type ISessionOpenEvent interface {
-	IFeedEvent
-	ISessionEvent
-	GetSessionOpenTime() time.Time
-}
-
 type SessionOpenEvent struct {
-	EventTime       time.Time
-	SessionOpenTime time.Time
-	Instrument      IInstrument
-	Price           float64
-	AuctionBased    bool
-	Volume          int64
+	eventTime       int64
+	sessionOpenTime int64
+	price           float64
+	volume          float64
+	instrumentID    int
+	auctionBased    bool
 }
 
-func (s *SessionOpenEvent) GetSessionOpenTime() time.Time {
-	return s.SessionOpenTime
+func NewSessionOpenEvent(et, sot int64, price, vol float64, instID int, auction bool) SessionOpenEvent {
+	return SessionOpenEvent{
+		eventTime:       et,
+		sessionOpenTime: sot,
+		price:           price,
+		volume:          vol,
+		instrumentID:    instID,
+		auctionBased:    auction,
+	}
 }
 
-func (s *SessionOpenEvent) GetDatetime() time.Time {
-	return s.EventTime
+func (s *SessionOpenEvent) SessionOpenTime() int64 {
+	return s.sessionOpenTime
 }
 
-func (s *SessionOpenEvent) GetRelevantPrice() float64 {
-	return s.Price
+func (s *SessionOpenEvent) Datetime() int64 {
+	return s.eventTime
+}
+
+func (s *SessionOpenEvent) RelevantPrice() float64 {
+	return s.price
 }
 
 func (s *SessionOpenEvent) IsAuctionBased() bool {
-	return s.AuctionBased
+	return s.auctionBased
 }
 
-func (s *SessionOpenEvent) GetInstrument() IInstrument {
-	return s.Instrument
+func (s *SessionOpenEvent) InstrumentID() int {
+	return s.instrumentID
 }
 
-func (s *SessionOpenEvent) GetVolume() int64 {
-	return s.Volume
+func (s *SessionOpenEvent) Volume() float64 {
+	return s.volume
 }
 
 // *** Session Will Open ***
-type ISessionWillOpenEvent interface {
-	IFeedEvent
-	GetSessionExpectedOpenTime() time.Time
-	GetInstrument() IInstrument
-}
-
 type SessionWillOpenEvent struct {
-	EventTime       time.Time
-	SessionOpenTime time.Time
-	Instrument      IInstrument
+	eventTime       int64
+	sessionOpenTime int64
+	instrumentID    int
 }
 
-func (s *SessionWillOpenEvent) GetInstrument() IInstrument {
-	return s.Instrument
+func NewSessionWillOpenEvent(et, sot int64, instID int) SessionWillOpenEvent {
+	return SessionWillOpenEvent{
+		eventTime:       et,
+		sessionOpenTime: sot,
+		instrumentID:    instID,
+	}
 }
 
-func (s *SessionWillOpenEvent) GetDatetime() time.Time {
-	return s.EventTime
+func (s *SessionWillOpenEvent) InstrumentID() int {
+	return s.instrumentID
 }
 
-func (s *SessionWillOpenEvent) GetSessionExpectedOpenTime() time.Time {
-	return s.SessionOpenTime
+func (s *SessionWillOpenEvent) Datetime() int64 {
+	return s.eventTime
+}
+
+func (s *SessionWillOpenEvent) SessionExpectedOpenTime() int64 {
+	return s.sessionOpenTime
 }
 
 //*** All Candles Closed ****
-type IAllCandlesClosedEvent interface {
-	IFeedEvent
-	GetExpectedCloseTime() time.Time
-}
-
 type AllCandlesClosedEvent struct {
-	EventTime         time.Time
-	ExpectedCloseTime time.Time
+	eventTime         int64
+	expectedCloseTime int64
 }
 
-func (s *AllCandlesClosedEvent) GetDatetime() time.Time {
-	return s.EventTime
+func NewAllCandlesClosedEvent(et, ect int64) AllCandlesClosedEvent {
+	return AllCandlesClosedEvent{
+		eventTime:         et,
+		expectedCloseTime: ect,
+	}
 }
 
-func (s *AllCandlesClosedEvent) GetExpectedCloseTime() time.Time {
-	return s.ExpectedCloseTime
+func (s *AllCandlesClosedEvent) Datetime() int64 {
+	return s.eventTime
+}
+
+func (s *AllCandlesClosedEvent) ExpectedCloseTime() int64 {
+	return s.expectedCloseTime
 }
 
 // *** No Market Data ***
-type INoMarketDataEvent interface {
-	IFeedEvent
-	Reason() string
-}
-
 type NoMarketDataEvent struct {
-	EventTime   time.Time
-	EventReason string
+	eventTime   int64
+	eventReason string
 }
 
-func (s *NoMarketDataEvent) GetDatetime() time.Time {
-	return s.EventTime
+func NewNoMarketDataEvent(et int64, reason string) NoMarketDataEvent {
+	return NoMarketDataEvent{
+		eventTime:   et,
+		eventReason: reason,
+	}
+}
+
+func (s *NoMarketDataEvent) Datetime() int64 {
+	return s.eventTime
 }
 
 func (s *NoMarketDataEvent) Reason() string {
-	return s.EventReason
+	return s.eventReason
 }

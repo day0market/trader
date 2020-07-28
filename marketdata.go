@@ -5,35 +5,10 @@ import (
 	"time"
 )
 
-type IInstrument interface {
-	GetSymbol() string
-	GetExchange() IExchange
-	GetIdentifier() string
-	GetMetadata() map[string]string
-}
-
-type IExchange interface {
-	GetMarketOpenTime() ITimeOfDay
-	GetMarketCloseTime() ITimeOfDay
-	GetLocation() *time.Location
-	GetName() string
-	HasOpeningAuction() bool
-	HasClosingAuction() bool
-	OpenSessionDuration() int
-	CloseSessionDuration() int
-}
-
-type ITimeOfDay interface {
-	Hour() int
-	Minute() int
-	Second() int
-	Location() *time.Location
-}
-
 type IInstrumentPriceContainer interface {
-	GetDatetime() time.Time
-	GetInstrument() IInstrument
-	GetRelevantPrice() float64
+	Datetime() int64
+	InstrumentID() int
+	RelevantPrice() float64
 }
 
 type Instrument struct {
@@ -45,11 +20,11 @@ func (i Instrument) GetSymbol() string {
 	return i.Symbol
 }
 
-func (i Instrument) GetExchange() IExchange {
+func (i Instrument) GetExchange() *Exchange {
 	return i.Exchange
 }
 
-func (i *Instrument) GetIdentifier() string {
+func (i Instrument) GetIdentifier() string {
 	return fmt.Sprintf("%s.%s", i.Symbol, i.Exchange.Name)
 }
 
@@ -58,8 +33,8 @@ func (i *Instrument) GetMetadata() map[string]string {
 }
 
 type Exchange struct {
-	OpenTime       time.Time
-	CloseTime      time.Time
+	OpenTime       TimeOfDay
+	CloseTime      TimeOfDay
 	Name           string
 	Location       *time.Location
 	OpeningAuction bool
@@ -76,7 +51,7 @@ func (e *Exchange) CloseSessionDuration() int {
 	return e.CloseDuration
 }
 
-func (e *Exchange) GetMarketOpenTime() ITimeOfDay {
+func (e *Exchange) GetMarketOpenTime() TimeOfDay {
 	return e.OpenTime
 }
 
@@ -88,7 +63,7 @@ func (e *Exchange) HasClosingAuction() bool {
 	return e.ClosingAuction
 }
 
-func (e *Exchange) GetMarketCloseTime() ITimeOfDay {
+func (e *Exchange) GetMarketCloseTime() TimeOfDay {
 	return e.CloseTime
 }
 
@@ -98,4 +73,11 @@ func (e *Exchange) GetLocation() *time.Location {
 
 func (e *Exchange) GetName() string {
 	return e.Name
+}
+
+type TimeOfDay struct {
+	Hour     int
+	Minute   int
+	Second   int
+	Location *time.Location
 }

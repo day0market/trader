@@ -3,16 +3,16 @@ package trader
 import "time"
 
 type IBroker interface {
-	NewOrder(o IOrder) error
-	CancelOrder(o IOrder) error
+	NewOrder(o Order) error
+	CancelOrder(o Order) error
 	OnMarketEvent(event IInstrumentPriceContainer)
 	OnTimeEvent(t time.Time)
-	GetOrderById(id string) IOrder
-	OpenPosition(i IInstrument) IPosition
+	GetOrderById(id string) Order
+	OpenPosition(i Instrument) IPosition
 	AllOpenPositions() []IPosition
 	AllClosedPositions() []IPosition
-	ClosedPositions(i IInstrument) []IPosition
-	AllOpenOrders() []IOrder
-	AllOrders() []IOrder
-	OpenOrders(i IInstrument) []IOrder
+	ClosedPositions(i Instrument) []IPosition
+	AllOpenOrders() []Order
+	AllOrders() []Order
+	OpenOrders(i Instrument) []Order
 }
