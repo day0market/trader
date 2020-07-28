@@ -55,10 +55,10 @@ type Order struct {
 	orderSide      OrderSide
 	executionPrice float64
 	price          float64
-	qty            int64
+	qty            float64
 	time           int64
 	creationTime   int64
-	instrument     Instrument
+	instrumentID   int
 	tif            OrderTIF
 	id             string
 	posID          string
@@ -119,16 +119,16 @@ func (t *Order) SetState(s OrderState) bool {
 	t.orderState = s
 	return true
 }
-func (t *Order) Qty() int64 {
+func (t *Order) Qty() float64 {
 	return t.qty
 }
-func (t *Order) UpdateQty(q int64) bool {
+func (t *Order) UpdateQty(q float64) bool {
 	t.qty = q
 	return true
 }
 
-func (t *Order) Instrument() Instrument {
-	return t.instrument
+func (t *Order) InstrumentID() int {
+	return t.instrumentID
 }
 func (t *Order) TIF() OrderTIF {
 	return t.tif
@@ -149,8 +149,8 @@ type OrderParams struct {
 	OrderSide      OrderSide
 	OrderType      OrderType
 	Price          float64
-	Qty            int64
-	Instrument     Instrument
+	Qty            float64
+	InstrumentID   int
 	TIF            OrderTIF
 	ID             string
 	ContinuousTags map[string]float64
@@ -167,7 +167,7 @@ func NewOrderFromParams(p *OrderParams) Order {
 		qty:            p.Qty,
 		time:           0,
 		creationTime:   0,
-		instrument:     p.Instrument,
+		instrumentID:   p.InstrumentID,
 		tif:            p.TIF,
 		id:             p.ID,
 		posID:          "",
