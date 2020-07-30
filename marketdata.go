@@ -12,7 +12,8 @@ type IInstrumentPriceContainer interface {
 }
 
 type Instrument struct {
-	Symbol string
+	Symbol   string
+	SystemID int
 	*Exchange
 }
 

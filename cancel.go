@@ -6,8 +6,8 @@ type OrderCancel struct {
 	order        *Order
 }
 
-func NewOrderCancel(time int64, instID int, order *Order) OrderCancel {
-	return OrderCancel{
+func NewOrderCancel(time int64, instID int, order *Order) *OrderCancel {
+	return &OrderCancel{
 		time:         time,
 		instrumentID: instID,
 		order:        order,

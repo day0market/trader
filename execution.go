@@ -7,8 +7,8 @@ type Execution struct {
 	order *Order
 }
 
-func NewExecution(t int64, price, qty float64, order *Order) Execution {
-	return Execution{
+func NewExecution(t int64, price, qty float64, order *Order) *Execution {
+	return &Execution{
 		time:  t,
 		price: price,
 		qty:   qty,

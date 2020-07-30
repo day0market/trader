@@ -92,12 +92,14 @@ func (s AfterSessionCloseEvent) InstrumentID() int {
 type SessionWillCloseEvent struct {
 	eventTime                int64
 	expectedSessionCloseTime int64
+	instrumentID             int
 }
 
-func NewSessionWillCloseEvent(et, esct int64) SessionWillCloseEvent {
+func NewSessionWillCloseEvent(et, esct int64, instID int) SessionWillCloseEvent {
 	return SessionWillCloseEvent{
 		eventTime:                et,
 		expectedSessionCloseTime: esct,
+		instrumentID:             instID,
 	}
 }
 
@@ -107,6 +109,10 @@ func (s *SessionWillCloseEvent) ExpectedSessionCloseTime() int64 {
 
 func (s *SessionWillCloseEvent) Datetime() int64 {
 	return s.eventTime
+}
+
+func (s *SessionWillCloseEvent) InstrumentID() int {
+	return s.instrumentID
 }
 
 // *** Session Open ***
