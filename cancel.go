@@ -1,29 +1,29 @@
 package trader
 
 type OrderCancel struct {
-	time         int64
-	instrumentID int
-	order        *Order
+	EventTime int64
+	InstID    int
+	BaseOrder *Order
 }
 
 func NewOrderCancel(time int64, instID int, order *Order) *OrderCancel {
 	return &OrderCancel{
-		time:         time,
-		instrumentID: instID,
-		order:        order,
+		EventTime: time,
+		InstID:    instID,
+		BaseOrder: order,
 	}
 }
 
 func (c *OrderCancel) Time() int64 {
-	return c.time
+	return c.EventTime
 }
 
 func (c *OrderCancel) InstrumentID() int {
-	return c.instrumentID
+	return c.InstID
 }
 
 func (c *OrderCancel) Order() *Order {
-	return c.order
+	return c.BaseOrder
 }
 
 type IOrderEvent interface {

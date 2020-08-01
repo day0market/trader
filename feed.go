@@ -18,213 +18,173 @@ type ISessionEvent interface {
 
 // *** Session Closed **
 type SessionClosedEvent struct {
-	eventTime        int64
-	sessionCloseTime int64
-	volume           float64
-	price            float64
-	instrumentID     int
-	auctionBased     bool
+	EventTime     int64
+	SessCloseTime int64
+	SessVolume    float64
+	Price         float64
+	InstID        int
+	Auction       bool
 }
 
-func NewSessionClosedEvent(et, sessCloseTime int64, price, vol float64, auctionBased bool, instID int) SessionClosedEvent {
-	return SessionClosedEvent{
-		eventTime:        et,
-		sessionCloseTime: sessCloseTime,
-		volume:           vol,
-		price:            price,
-		auctionBased:     auctionBased,
-		instrumentID:     instID,
+func NewSessionClosedEvent(et, sessCloseTime int64, price, vol float64, auctionBased bool, instID int) *SessionClosedEvent {
+	return &SessionClosedEvent{
+		EventTime:     et,
+		SessCloseTime: sessCloseTime,
+		SessVolume:    vol,
+		Price:         price,
+		Auction:       auctionBased,
+		InstID:        instID,
 	}
 }
 
 func (s SessionClosedEvent) RelevantPrice() float64 {
-	return s.price
+	return s.Price
 }
 
 func (s SessionClosedEvent) IsAuctionBased() bool {
-	return s.auctionBased
+	return s.Auction
 }
 
 func (s SessionClosedEvent) InstrumentID() int {
-	return s.instrumentID
+	return s.InstID
 }
 
 func (s SessionClosedEvent) Volume() float64 {
-	return s.volume
+	return s.SessVolume
 }
 
 func (s SessionClosedEvent) Datetime() int64 {
-	return s.eventTime
-}
-
-func (s *SessionClosedEvent) SessionCloseTime() int64 {
-	return s.sessionCloseTime
+	return s.EventTime
 }
 
 // *** After Session Close **
 type AfterSessionCloseEvent struct {
-	eventTime        int64
-	sessionCloseTime int64
-	instrumentID     int
+	EventTime     int64
+	SessCloseTime int64
+	InstID        int
 }
 
-func NewAfterSessionClosedEvent(et, sct int64, instID int) AfterSessionCloseEvent {
-	return AfterSessionCloseEvent{
-		eventTime:        et,
-		sessionCloseTime: sct,
-		instrumentID:     instID,
+func NewAfterSessionClosedEvent(et, sct int64, instID int) *AfterSessionCloseEvent {
+	return &AfterSessionCloseEvent{
+		EventTime:     et,
+		SessCloseTime: sct,
+		InstID:        instID,
 	}
 }
 
-func (s AfterSessionCloseEvent) Datetime() int64 {
-	return s.eventTime
-}
-
-func (s AfterSessionCloseEvent) SessionCloseTime() int64 {
-	return s.sessionCloseTime
-}
-
-func (s AfterSessionCloseEvent) InstrumentID() int {
-	return s.instrumentID
+func (s *AfterSessionCloseEvent) Datetime() int64 {
+	return s.EventTime
 }
 
 // *** Session Will Close ***
 type SessionWillCloseEvent struct {
-	eventTime                int64
-	expectedSessionCloseTime int64
-	instrumentID             int
+	EventTime                int64
+	ExpectedSessionCloseTime int64
+	InstID                   int
 }
 
 func NewSessionWillCloseEvent(et, esct int64, instID int) SessionWillCloseEvent {
 	return SessionWillCloseEvent{
-		eventTime:                et,
-		expectedSessionCloseTime: esct,
-		instrumentID:             instID,
+		EventTime:                et,
+		ExpectedSessionCloseTime: esct,
+		InstID:                   instID,
 	}
 }
 
-func (s *SessionWillCloseEvent) ExpectedSessionCloseTime() int64 {
-	return s.expectedSessionCloseTime
-}
-
 func (s *SessionWillCloseEvent) Datetime() int64 {
-	return s.eventTime
-}
-
-func (s *SessionWillCloseEvent) InstrumentID() int {
-	return s.instrumentID
+	return s.EventTime
 }
 
 // *** Session Open ***
 type SessionOpenEvent struct {
-	eventTime       int64
-	sessionOpenTime int64
-	price           float64
-	volume          float64
-	instrumentID    int
-	auctionBased    bool
+	EventTime       int64
+	SessionOpenTime int64
+	Price           float64
+	SessVolume      float64
+	InstID          int
+	Auction         bool
 }
 
-func NewSessionOpenEvent(et, sot int64, price, vol float64, instID int, auction bool) SessionOpenEvent {
-	return SessionOpenEvent{
-		eventTime:       et,
-		sessionOpenTime: sot,
-		price:           price,
-		volume:          vol,
-		instrumentID:    instID,
-		auctionBased:    auction,
+func NewSessionOpenEvent(et, sot int64, price, vol float64, instID int, auction bool) *SessionOpenEvent {
+	return &SessionOpenEvent{
+		EventTime:       et,
+		SessionOpenTime: sot,
+		Price:           price,
+		SessVolume:      vol,
+		InstID:          instID,
+		Auction:         auction,
 	}
 }
 
-func (s *SessionOpenEvent) SessionOpenTime() int64 {
-	return s.sessionOpenTime
-}
-
 func (s *SessionOpenEvent) Datetime() int64 {
-	return s.eventTime
+	return s.EventTime
 }
 
 func (s *SessionOpenEvent) RelevantPrice() float64 {
-	return s.price
+	return s.Price
 }
 
 func (s *SessionOpenEvent) IsAuctionBased() bool {
-	return s.auctionBased
+	return s.Auction
 }
 
 func (s *SessionOpenEvent) InstrumentID() int {
-	return s.instrumentID
+	return s.InstID
 }
 
 func (s *SessionOpenEvent) Volume() float64 {
-	return s.volume
+	return s.SessVolume
 }
 
 // *** Session Will Open ***
 type SessionWillOpenEvent struct {
-	eventTime       int64
-	sessionOpenTime int64
-	instrumentID    int
+	EventTime       int64
+	SessionOpenTime int64
+	InstID          int
 }
 
-func NewSessionWillOpenEvent(et, sot int64, instID int) SessionWillOpenEvent {
-	return SessionWillOpenEvent{
-		eventTime:       et,
-		sessionOpenTime: sot,
-		instrumentID:    instID,
+func NewSessionWillOpenEvent(et, sot int64, instID int) *SessionWillOpenEvent {
+	return &SessionWillOpenEvent{
+		EventTime:       et,
+		SessionOpenTime: sot,
+		InstID:          instID,
 	}
 }
 
-func (s *SessionWillOpenEvent) InstrumentID() int {
-	return s.instrumentID
-}
-
 func (s *SessionWillOpenEvent) Datetime() int64 {
-	return s.eventTime
-}
-
-func (s *SessionWillOpenEvent) SessionExpectedOpenTime() int64 {
-	return s.sessionOpenTime
+	return s.EventTime
 }
 
 //*** All Candles Closed ****
 type AllCandlesClosedEvent struct {
-	eventTime         int64
-	expectedCloseTime int64
+	EventTime         int64
+	ExpectedCloseTime int64
 }
 
-func NewAllCandlesClosedEvent(et, ect int64) AllCandlesClosedEvent {
-	return AllCandlesClosedEvent{
-		eventTime:         et,
-		expectedCloseTime: ect,
+func NewAllCandlesClosedEvent(et, ect int64) *AllCandlesClosedEvent {
+	return &AllCandlesClosedEvent{
+		EventTime:         et,
+		ExpectedCloseTime: ect,
 	}
 }
 
 func (s *AllCandlesClosedEvent) Datetime() int64 {
-	return s.eventTime
-}
-
-func (s *AllCandlesClosedEvent) ExpectedCloseTime() int64 {
-	return s.expectedCloseTime
+	return s.EventTime
 }
 
 // *** No Market Data ***
 type NoMarketDataEvent struct {
-	eventTime   int64
-	eventReason string
+	EventTime int64
+	Reason    string
 }
 
-func NewNoMarketDataEvent(et int64, reason string) NoMarketDataEvent {
-	return NoMarketDataEvent{
-		eventTime:   et,
-		eventReason: reason,
+func NewNoMarketDataEvent(et int64, reason string) *NoMarketDataEvent {
+	return &NoMarketDataEvent{
+		EventTime: et,
+		Reason:    reason,
 	}
 }
 
 func (s *NoMarketDataEvent) Datetime() int64 {
-	return s.eventTime
-}
-
-func (s *NoMarketDataEvent) Reason() string {
-	return s.eventReason
+	return s.EventTime
 }

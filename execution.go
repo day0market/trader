@@ -1,37 +1,29 @@
 package trader
 
 type Execution struct {
-	time  int64
-	price float64
-	qty   float64
-	order *Order
+	EventTime int64
+	Price     float64
+	Qty       float64
+	BaseOrder *Order
 }
 
 func NewExecution(t int64, price, qty float64, order *Order) *Execution {
 	return &Execution{
-		time:  t,
-		price: price,
-		qty:   qty,
-		order: order,
+		EventTime: t,
+		Price:     price,
+		Qty:       qty,
+		BaseOrder: order,
 	}
 }
 
 func (e *Execution) Time() int64 {
-	return e.time
+	return e.EventTime
 }
 
 func (e *Execution) InstrumentID() int {
-	return e.order.instrumentID
+	return e.BaseOrder.instrumentID
 }
 
 func (e *Execution) Order() *Order {
-	return e.order
-}
-
-func (e *Execution) Qty() float64 {
-	return e.qty
-}
-
-func (e *Execution) Price() float64 {
-	return e.price
+	return e.BaseOrder
 }
