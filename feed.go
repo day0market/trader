@@ -83,8 +83,8 @@ type SessionWillCloseEvent struct {
 	InstID                   int
 }
 
-func NewSessionWillCloseEvent(et, esct int64, instID int) SessionWillCloseEvent {
-	return SessionWillCloseEvent{
+func NewSessionWillCloseEvent(et, esct int64, instID int) *SessionWillCloseEvent {
+	return &SessionWillCloseEvent{
 		EventTime:                et,
 		ExpectedSessionCloseTime: esct,
 		InstID:                   instID,
