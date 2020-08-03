@@ -1,7 +1,7 @@
 package trader
 
 type IFeed interface {
-	Subscribe(chan<- IFeedEvent, []Instrument)
+	Subscribe(chan<- IFeedEvent, []*Instrument)
 	Unsubscribe()
 }
 

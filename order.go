@@ -157,8 +157,8 @@ type OrderParams struct {
 	DiscreteTags   map[string]string
 }
 
-func NewOrderFromParams(p *OrderParams) Order {
-	return Order{
+func NewOrderFromParams(p *OrderParams) *Order {
+	return &Order{
 		orderType:      p.OrderType,
 		orderState:     NewOrder,
 		orderSide:      p.OrderSide,

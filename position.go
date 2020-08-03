@@ -9,7 +9,7 @@ const (
 )
 
 type IPosition interface {
-	//Instrument() Instrument
+	InstrumentID() int
 	OpenTime() int64
 	CloseTime() int64
 	Side() PositionSide
